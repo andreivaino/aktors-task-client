@@ -1,0 +1,85 @@
+<div class="container d-flex justify-content-center mr-auto h3">Products</div>
+<div class="container">
+  <div class="table-responsive-xl">
+    <table class="table table-striped mx-auto">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col" colspan="7" class="bg-white text-nowrap border-white text-dark">
+          Sort by:
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortProducts(sortingType.Barcode)">Barcode</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortProducts(sortingType.ProductName)">Product name</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortProducts(sortingType.Price)">Price</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortProducts(sortingType.ReleaseDate)">Release date</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortProducts(sortingType.OrderNumber)">By Order</a>
+        </th>
+        <th scope="col" colspan="1" class="bg-white text-right border-white">
+          <button type="button" class="btn btn-success text-nowrap"
+                  data-toggle="modal" data-target="#productModal" (click)="setModalType(modalType.New)">New product</button>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">Barcode</th>
+        <th scope="col">Name</th>
+        <th scope="col" class="text-nowrap">Base price</th>
+        <th scope="col" class="text-nowrap">Description</th>
+        <th scope="col" class="text-nowrap">Release date</th>
+        <th scope="col" class="text-nowrap text-center">Order</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="(products.length < 1); else availableProductsBlock">
+        <th scope="col" class="text-center align-middle" colspan="8" style="height: 100px">No orders
+        </th>
+      </tr>
+      <ng-template #availableProductsBlock>
+        <tr *ngFor="let product of products">
+          <th scope="col">{{product.barcode}}</th>
+          <th scope="col">{{product.name}}</th>
+          <th scope="col">{{product.basePrice | number: '.2'}} €</th>
+          <th scope="col">{{product.description}}</th>
+          <th scope="col">{{product.releaseDate}}</th>
+          <th *ngIf="product.order; else noOrderBlock" scope="col" class="text-center text-nowrap"># {{product.order.orderNumber}}</th>
+          <ng-template #noOrderBlock>
+            <th scope="col" class="text-center text-nowrap">no order</th>
+          </ng-template>
+          <th scope="col" class="text-center">
+            <button type="button" class="btn btn-success"
+                    data-toggle="modal" data-target="#productModal" (click)="setModalType(modalType.Edit); setCurrentProduct(product)">Edit</button>
+          </th>
+          <th scope="col" class="text-center">
+            <button type="button" class="btn btn-danger" (click)="removeProduct(product)">Delete</button>
+          </th>
+        </tr>
+      </ng-template>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{modal}} product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="modal === modalType.New; else editBlock" class="modal-body">
+        <app-new-product></app-new-product>
+      </div>
+      <ng-template #editBlock>
+        <div class="modal-body">
+          <app-product-management></app-product-management>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+

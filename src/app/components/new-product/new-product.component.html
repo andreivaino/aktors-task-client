@@ -1,0 +1,61 @@
+<form [formGroup]="productForm" (submit)="onSubmit()">
+  <div class="form-group row justify-content-center">
+    <label for="barcode" class="col-sm-3 col-form-label text-nowrap">Barcode</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control-plaintext form-control border-bottom" (keyup)="onKey($event)" id="barcode" formControlName="barcode">
+    </div>
+    <div class="w-100"></div>
+    <div class="error text-danger text-center" *ngIf="isControlInvalid('barcode')">
+      Barcode should contain only numbers<br>Min 12 and Max 13
+    </div>
+    <div class="error text-danger text-center" *ngIf="errorMessage">
+      This barcode is already in use
+    </div>
+  </div>
+  <div class="form-group row justify-content-center">
+    <label for="name" class="col-sm-3 col-form-label text-nowrap">Name</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control-plaintext border-bottom" id="name" formControlName="name">
+    </div>
+    <div class="w-100"></div>
+    <div class="error text-danger text-center" *ngIf="isControlInvalid('name')">
+      Min 1, Max 40 symbols
+    </div>
+  </div>
+  <div class="form-group row justify-content-center">
+    <label for="basePrice" class="col-sm-3 col-form-label text-nowrap">Base price</label>
+    <div class="col-sm-6">
+      <input type="number" class="form-control-plaintext border-bottom" id="basePrice" formControlName="basePrice">
+    </div>
+    <div class="w-100"></div>
+    <div class="error text-danger text-center" *ngIf="isControlInvalid('basePrice')">
+      Price should contain only numbers<br>Min 1 number
+    </div>
+  </div>
+  <div class="form-group row justify-content-center">
+    <label for="description" class="col-sm-3 col-form-label text-nowrap">Description</label>
+    <div class="col-sm-6">
+      <textarea type="text" class="form-control-plaintext border-bottom" id="description" formControlName="description">
+      </textarea>
+    </div>
+    <div class="w-100"></div>
+    <div class="error text-danger text-center" *ngIf="isControlInvalid('description')">
+    Please write description for product
+  </div>
+  </div>
+  <div class="form-group row justify-content-center">
+    <label for="releaseDate" class="col-sm-3 col-form-label text-nowrap">Release date</label>
+    <div class="col-sm-6">
+      <input  type="date" class="form-control" id="releaseDate" name="releaseDate"
+              formControlName="releaseDate">
+    </div>
+    <div class="w-100"></div>
+    <div class="error text-danger text-center" *ngIf="isControlInvalid('releaseDate')">
+      Please choose release date
+    </div>
+  </div>
+  <div class="modal-footer border-top-0">
+    <button type="submit" class="btn btn-primary text-nowrap">Save product</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  </div>
+</form>

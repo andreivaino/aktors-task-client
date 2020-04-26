@@ -1,0 +1,209 @@
+<div class="container d-flex justify-content-center mr-auto h3">New Order</div>
+<div class="container d-flex justify-content-center mt-4 mr-auto">
+  <div class="row d-flex justify-content-center">
+    <div class="d-flex fixed-row">
+      <div class="col-md-auto table bordered">
+        <div class="input-group">
+          <div class="custom-file">
+            <input *ngIf="!order.client; else elseBlock" type="text" class="form-control-plaintext border-bottom"
+                   disabled value="No client selected">
+            <ng-template #elseBlock>
+              <input type="text" class="form-control-plaintext border-bottom"
+                     disabled value="{{order.client.firstName}} {{order.client.lastName}}">
+            </ng-template>
+          </div>
+          <div class="input-group-append">
+            <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#clientToNewOrder"
+                    (click)="loadProductsWithNoOrder()">Choose client
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="table-responsive-xl">
+    <table class="table table-striped mx-auto">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col" colspan="3" class="bg-white text-right border-white">
+          <div class="d-flex fixed-row text-dark">
+            <div class="col-md-auto text-nowrap">Total price:</div>
+            <div class="col-md-auto text-nowrap font-weight-bold">{{getTotalPrice() | number: '.2'}} €
+            </div>
+          </div>
+        </th>
+        <th scope="col" colspan="3" class="bg-white text-right border-white">
+          <button type="button" class="btn btn-secondary text-nowrap" data-toggle="modal"
+                  data-target="#productsModelNewOrder"
+                  (click)="loadProductsWithNoOrder()">Add product
+          </button>
+          <button type="button" class="btn btn-success text-nowrap ml-2" (click)="saveOrder()">Save order</button>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">Barcode</th>
+        <th scope="col">Name</th>
+        <th scope="col" class="text-nowrap">Base price</th>
+        <th scope="col" class="text-nowrap">Description</th>
+        <th scope="col" class="text-nowrap">Release date</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="(!order.products || order.products.length < 1); else noProductsBlock">
+        <th scope="col" class="text-center align-middle" colspan="6" style="height: 100px">No products</th>
+      </tr>
+      <ng-template #noProductsBlock>
+        <tr *ngFor="let product of order.products">
+          <th scope="col">{{product.barcode}}</th>
+          <th scope="col">{{product.name}}</th>
+          <th scope="col">{{product.basePrice | number: '.2'}} €</th>
+          <th scope="col">{{product.description}}</th>
+          <th scope="col">{{product.releaseDate}}</th>
+          <th scope="col" class="text-center">
+            <button type="button" class="btn btn-danger" (click)="removeProductFromOrder(product)">Remove</button>
+          </th>
+        </tr>
+      </ng-template>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="productsModelNewOrder" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="width: 100%; overflow-x: auto;">
+        <h5 class="modal-title">Available products</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="width: 100%; overflow-x: auto;">
+        <div class="table-responsive-xl">
+          <table class="table table-striped mx-auto">
+            <thead class="thead-dark">
+            <tr>
+              <th scope="col" colspan="6" class="bg-white text-nowrap border-white text-dark">
+                Sort by:
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortProducts(sortingType.Barcode)">Barcode</a>/
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortProducts(sortingType.ProductName)">Product name</a>/
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortProducts(sortingType.Price)">Price</a>/
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortProducts(sortingType.ReleaseDate)">Release date</a>
+              </th>
+            </tr>
+            <tr>
+              <th scope="col">Barcode</th>
+              <th scope="col">Name</th>
+              <th scope="col" class="text-nowrap">Base price</th>
+              <th scope="col" class="text-nowrap">Description</th>
+              <th scope="col" class="text-nowrap">Release date</th>
+              <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngIf="(noOrderProducts?.length < 1); else noAvailableProducts">
+              <th scope="col" class="text-center align-middle" colspan="6" style="height: 100px">No available products
+              </th>
+            </tr>
+            <ng-template #noAvailableProducts>
+              <tr *ngFor="let product of noOrderProducts">
+                <th scope="col">{{product.barcode}}</th>
+                <th scope="col">{{product.name}}</th>
+                <th scope="col">{{product.basePrice | number: '.2'}} €</th>
+                <th scope="col">{{product.description}}</th>
+                <th scope="col">{{product.releaseDate}}</th>
+                <th scope="col">
+                  <button type="button" class="btn btn-success text-nowrap"
+                          (click)="addProductToOrder(product)">Add to order
+                  </button>
+                </th>
+              </tr>
+            </ng-template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer" style="width: 100%; overflow-x: auto;">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="clientToNewOrder" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="width: 100%; overflow-x: auto;">
+        <h5 class="modal-title">Change client</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="width: 100%; overflow-x: auto;">
+        <div class="table-responsive-xl">
+          <table class="table table-striped table-hover mx-auto w-auto">
+            <thead class="thead-dark">
+            <tr>
+              <th scope="col" colspan="7" class="bg-white text-nowrap border-white text-dark">
+                Sort by:
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortClients(sortingType.PersonalId)">Id</a>/
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortClients(sortingType.ClientFirstName)">First name</a>/
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortClients(sortingType.ClientLastName)">Last name</a>/
+                <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+                   (click)="sortClients(sortingType.ClientCountry)">Country</a>
+              </th>
+            </tr>
+            <tr>
+              <th scope="col" class="text-nowrap">Personal Id</th>
+              <th scope="col" class="text-nowrap">First name</th>
+              <th scope="col" class="text-nowrap">Last name</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Address</th>
+              <th scope="col">Country</th>
+              <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngIf="(clients.length < 1); else availableClientsBlock">
+              <th scope="col" class="text-center align-middle" colspan="6" style="height: 100px">No clients</th>
+            </tr>
+            <ng-template #availableClientsBlock>
+              <tr *ngFor="let client of clients">
+                <th scope="col">{{client.personalId}}</th>
+                <th scope="col">{{client.firstName}}</th>
+                <th scope="col">{{client.lastName}}</th>
+                <th scope="col" class="text-nowrap">{{client.phone}}</th>
+                <th scope="col">{{client.address}}</th>
+                <th scope="col">{{client.country}}</th>
+                <th scope="col">
+                  <button *ngIf="(order.client && client.personalId === order.client.personalId); else elseBlock"
+                          type="button" class="btn btn-secondary text-nowrap" disabled>Change
+                  </button>
+                  <ng-template #elseBlock>
+                    <button type="button" class="btn btn-success"
+                            (click)="setClientToOrder(client)">Change
+                    </button>
+                  </ng-template>
+                </th>
+              </tr>
+            </ng-template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer" style="width: 100%; overflow-x: auto;">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

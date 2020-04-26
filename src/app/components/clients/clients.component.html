@@ -1,0 +1,80 @@
+<div class="container d-flex justify-content-center mr-auto h3">Clients</div>
+<div class="container">
+  <div class="table-responsive-xl">
+    <table class="table table-striped mx-auto">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col" colspan="7" class="bg-white text-nowrap border-white text-dark">
+          Sort by:
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortClients(sortingType.PersonalId)">Personal Id</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortClients(sortingType.ClientFirstName)">First name</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortClients(sortingType.ClientLastName)">Last name</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]=""
+             (click)="sortClients(sortingType.ClientCountry)">Country</a>
+        </th>
+        <th scope="col" colspan="1" class="bg-white text-right border-white">
+          <button type="button" class="btn btn-success text-nowrap"
+                  data-toggle="modal" data-target="#clientModal" (click)="setModalType(modalType.New)">New client</button>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col" class="text-nowrap">Personal Id</th>
+        <th scope="col" class="text-nowrap">First name</th>
+        <th scope="col" class="text-nowrap">Last name</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Address</th>
+        <th scope="col">Country</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="(clients.length < 1); else availableClientsBlock">
+        <th scope="col" class="text-center align-middle" colspan="8" style="height: 100px">No orders
+        </th>
+      </tr>
+      <ng-template #availableClientsBlock>
+        <tr *ngFor="let client of clients">
+          <th scope="col">{{client.personalId}}</th>
+          <th scope="col">{{client.firstName}}</th>
+          <th scope="col">{{client.lastName}}</th>
+          <th scope="col" class="text-nowrap">{{client.phone}}</th>
+          <th scope="col">{{client.address}}</th>
+          <th scope="col">{{client.country}}</th>
+          <th scope="col" class="text-center">
+            <button type="button" class="btn btn-success"
+                    data-toggle="modal" data-target="#clientModal" (click)="setModalType(modalType.Edit); setCurrentClient(client)">Edit</button>
+          </th>
+          <th scope="col" class="text-center">
+            <button type="button" class="btn btn-danger" (click)="removeClient(client)">Delete</button>
+          </th>
+        </tr>
+      </ng-template>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{modal}} client</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="modal === modalType.New; else editBlock" class="modal-body">
+        <app-new-client></app-new-client>
+      </div>
+      <ng-template #editBlock>
+        <div class="modal-body">
+          <app-client-management></app-client-management>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+

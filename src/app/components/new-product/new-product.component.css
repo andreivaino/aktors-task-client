@@ -1,0 +1,29 @@
+input.ng-touched.ng-invalid{
+  border-bottom:1px solid!important;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  border-top:0;
+  border-color:#dc3545!important;
+}
+
+input.ng-valid{
+  border-bottom:1px solid!important;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  border-top:0;
+  border-color:forestgreen!important;
+}
+
+.form-control {
+  box-shadow: none!important;
+  border-radius: 0;
+}
+
+.form-control:focus {
+  box-shadow: none!important;
+  border-top: 0;
+  border-radius: 0;
+  border-color: transparent!important;
+}

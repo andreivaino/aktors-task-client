@@ -1,0 +1,60 @@
+<div class="container d-flex justify-content-center mr-auto h3">Orders</div>
+<div class="container">
+  <div class="table-responsive-xl">
+    <table class="table table-striped mx-auto">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col" colspan="6" class="bg-white text-nowrap border-white text-dark">
+          Sort by: Client
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]="" (click)="sortOrders(sortingType.ClientFirstName)">First
+            name</a>-
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]="" (click)="sortOrders(sortingType.ClientLastName)">Last
+            name</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]="" (click)="sortOrders(sortingType.OrderNumber)">Order
+            Number</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]="" (click)="sortOrders(sortingType.Price)">Price</a>/
+          <a class="ml-1 mr-1 text-decoration-none" [routerLink]="" (click)="sortOrders(sortingType.Transaction)">
+            Transaction date</a>
+        </th>
+        <th scope="col" colspan="1" class="bg-white text-right border-white">
+          <button type="button" class="btn btn-success text-nowrap" routerLink="/order/new">New order</button>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Price</th>
+        <th scope="col">Transaction Date</th>
+        <th scope="col">Client</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="(orders.length < 1); else availableOrdersBlock">
+        <th scope="col" class="text-center align-middle" colspan="7" style="height: 100px">No orders
+        </th>
+      </tr>
+      <ng-template #availableOrdersBlock>
+        <tr *ngFor="let order of orders">
+          <th scope="col">{{order.orderNumber}}</th>
+          <th scope="col">{{order.price | number: '.2'}} €</th>
+          <th scope="col">{{order.transactionDate}}</th>
+          <th scope="col">{{order.client.firstName}} {{order.client.lastName}}</th>
+          <th scope="col">
+            <button type="button" class="btn btn-info" routerLink="/orders/{{order.orderNumber}}">Details</button>
+          </th>
+          <th scope="col">
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Disabled tooltip">
+            <button type="button" class="btn btn-danger" (click)="removeOrder(order)">Remove</button>
+            </span>
+          </th>
+          <th scope="col">
+            <button type="button" class="btn btn-success" (click)="deleteOrder(order.orderNumber)">Confirm</button>
+          </th>
+        </tr>
+      </ng-template>
+      </tbody>
+    </table>
+  </div>
+</div>
