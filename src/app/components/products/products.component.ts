@@ -4,7 +4,7 @@ import {SortingType} from '../../enums/SortingType';
 import {SortingService} from '../../services/utils/sorting.service';
 import {finalize} from 'rxjs/operators';
 import {OrderService} from '../../services/order.service';
-import {formatDate} from '@angular/common';
+import {DatePipe, formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-products',
@@ -19,7 +19,8 @@ export class ProductsComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private orderService: OrderService,
-    private sortingService: SortingService
+    private sortingService: SortingService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +48,8 @@ export class ProductsComponent implements OnInit {
     if (isAccepted) {
       if (product.order) {
         product.order.price = Number(product.order.price) - Number(product.basePrice);
-        product.order.transactionDate = null;
+        product.order.transactionDate = this.parseDate(product.order.transactionDate);
+        console.log(product.order.transactionDate);
         this.orderService.updateOrder(product.order).subscribe();
       }
       this.productService.deleteProduct(Number(product.barcode))
@@ -78,6 +80,14 @@ export class ProductsComponent implements OnInit {
   setCurrentProduct(product: any) {
     localStorage.setItem('product', JSON.stringify(product));
   }
+
+  parseDate(dateString: string) {
+    if (dateString) {
+      return this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    }
+    return null;
+  }
+
 }
 
 export enum ModalType {

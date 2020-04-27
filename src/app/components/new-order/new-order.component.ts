@@ -6,6 +6,7 @@ import {finalize} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {SortingType} from '../../enums/SortingType';
 import {SortingService} from '../../services/utils/sorting.service';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-new-order',

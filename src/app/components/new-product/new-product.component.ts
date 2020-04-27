@@ -20,8 +20,7 @@ export class NewProductComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
-    private router: Router,
-    private datePipe: DatePipe
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -82,13 +81,6 @@ export class NewProductComponent implements OnInit {
 
   onKey($event: KeyboardEvent) {
     this.errorMessage = null;
-  }
-
-  parseDate(dateString: string) {
-    if (dateString) {
-      return this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    }
-    return null;
   }
 
 }
