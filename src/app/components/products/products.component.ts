@@ -5,6 +5,7 @@ import {SortingService} from '../../services/utils/sorting.service';
 import {finalize} from 'rxjs/operators';
 import {OrderService} from '../../services/order.service';
 import {DatePipe, formatDate} from '@angular/common';
+import {ObserveService} from '../../services/utils/observe.service';
 
 @Component({
   selector: 'app-products',
@@ -20,7 +21,8 @@ export class ProductsComponent implements OnInit {
     private productService: ProductService,
     private orderService: OrderService,
     private sortingService: SortingService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private observeService: ObserveService
   ) { }
 
   ngOnInit(): void {
@@ -86,6 +88,10 @@ export class ProductsComponent implements OnInit {
       return this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
     }
     return null;
+  }
+
+  notifyProductManagement(product: any) {
+    this.observeService.notifyProductManagement(product);
   }
 
 }

@@ -4,6 +4,8 @@ import {ProductService} from '../../services/product.service';
 import {Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {finalize} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
+import {ObserveService} from '../../services/utils/observe.service';
 
 @Component({
   selector: 'app-product-management',
@@ -12,23 +14,30 @@ import {finalize} from 'rxjs/operators';
 })
 export class ProductManagementComponent implements OnInit {
 
-
   productForm: FormGroup;
   product: any = {};
   errorMessage;
   currentDate;
+  subscription: Subscription;
 
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private observeService: ObserveService
   ) { }
 
   ngOnInit(): void {
-    this.product = JSON.parse(localStorage.getItem('product'));
+    this.subscription = this.observeService.notifyClientComp
+      .subscribe((res) => { this.product = res; this.initForm(); });
+    this.initProduct();
     this.currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
     this.initForm();
+  }
+
+  initProduct() {
+    this.product = JSON.parse(localStorage.getItem('product'));
   }
 
   initForm() {
@@ -84,13 +93,6 @@ export class ProductManagementComponent implements OnInit {
 
   onKey($event: KeyboardEvent) {
     this.errorMessage = null;
-  }
-
-  parseDate(dateString: string) {
-    if (dateString) {
-      return this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    }
-    return null;
   }
 
 }

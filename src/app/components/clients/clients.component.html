@@ -46,7 +46,11 @@
           <th scope="col">{{client.country}}</th>
           <th scope="col" class="text-center">
             <button type="button" class="btn btn-success"
-                    data-toggle="modal" data-target="#clientModal" (click)="setModalType(modalType.Edit); setCurrentClient(client)">Edit</button>
+                    data-toggle="modal" data-target="#clientModal"
+                    (click)="
+                    setModalType(modalType.Edit);
+                    setCurrentClient(client);
+                    notifyClientManagement(client)">Edit</button>
           </th>
           <th scope="col" class="text-center">
             <button type="button" class="btn btn-danger" (click)="removeClient(client)">Delete</button>

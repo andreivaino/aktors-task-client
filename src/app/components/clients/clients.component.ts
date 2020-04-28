@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ClientService} from '../../services/client.service';
 import {SortingType} from '../../enums/SortingType';
 import {SortingService} from '../../services/utils/sorting.service';
 import {finalize} from 'rxjs/operators';
 import {OrderService} from '../../services/order.service';
+import {ClientManagementComponent} from '../client-management/client-management.component';
+import {ObserveService} from '../../services/utils/observe.service';
 
 @Component({
   selector: 'app-clients',
@@ -13,12 +15,14 @@ export class ClientsComponent implements OnInit {
 
   clients: any[] = [];
   clientsSortingType: SortingType;
+  firstCmp;
   modal;
 
   constructor(
     private clientService: ClientService,
     private orderService: OrderService,
-    private sortingService: SortingService
+    private sortingService: SortingService,
+    private observeService: ObserveService
   ) { }
 
   ngOnInit(): void {
@@ -86,6 +90,11 @@ export class ClientsComponent implements OnInit {
   setCurrentClient(client: any) {
     localStorage.setItem('client', JSON.stringify(client));
   }
+
+  notifyClientManagement(client: any) {
+    this.observeService.notifyClientManagement(client);
+  }
+
 }
 
 export enum ModalType {

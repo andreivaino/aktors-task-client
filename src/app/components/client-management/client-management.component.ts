@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClientService} from '../../services/client.service';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
+import {ObserveService} from '../../services/utils/observe.service';
 
 @Component({
   selector: 'app-client-management',
@@ -14,16 +16,25 @@ export class ClientManagementComponent implements OnInit {
   clientForm: FormGroup;
   client: any = {};
   errorMessage;
+  subscription: Subscription;
 
   constructor(
     private clientService: ClientService,
     private formBuilder: FormBuilder,
-    private router: Router
-  ) { }
+    private router: Router,
+    private observeService: ObserveService
+  ) {
+  }
 
   ngOnInit(): void {
-    this.client = JSON.parse(localStorage.getItem('client'));
+    this.subscription = this.observeService.notifyClientComp
+      .subscribe((res) => { this.client = res; this.initForm(); });
+    this.initClient();
     this.initForm();
+  }
+
+  initClient() {
+    this.client = JSON.parse(localStorage.getItem('client'));
   }
 
   initForm() {
@@ -79,7 +90,8 @@ export class ClientManagementComponent implements OnInit {
           window.location.reload();
         }
       }))
-      .subscribe(res => {}, error => this.errorMessage = error);
+      .subscribe(res => {
+      }, error => this.errorMessage = error);
   }
 
   onKey($event: KeyboardEvent) {

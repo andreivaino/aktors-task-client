@@ -18,6 +18,7 @@ import {OwnHttpClient} from './services/http-client/own-http-client.service';
 import {SortingService} from './services/utils/sorting.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {DatePipe} from '@angular/common';
+import {ObserveService} from './services/utils/observe.service';
 
 const appRoutes: Routes = [
   { path: 'orders', component: OrdersComponent },
@@ -58,7 +59,8 @@ const appRoutes: Routes = [
   providers: [
     OwnHttpClient,
     SortingService,
-    DatePipe
+    DatePipe,
+    ObserveService
   ],
   bootstrap: [AppComponent]
 })
