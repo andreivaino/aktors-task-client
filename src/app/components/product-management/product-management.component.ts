@@ -29,7 +29,7 @@ export class ProductManagementComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.subscription = this.observeService.notifyClientComp
+    this.subscription = this.observeService.notifyProductComp
       .subscribe((res) => { this.product = res; this.initForm(); });
     this.initProduct();
     this.currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
