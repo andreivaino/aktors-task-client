@@ -6,7 +6,7 @@ export class ObserveService {
   private notifyClient = new Subject<any>();
   private notifyProduct = new Subject<any>();
 
-  notifyClientComp = this.notifyProduct.asObservable();
+  notifyClientComp = this.notifyClient.asObservable();
   notifyProductComp = this.notifyProduct.asObservable();
 
   constructor() {}
