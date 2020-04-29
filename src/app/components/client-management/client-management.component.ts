@@ -30,7 +30,6 @@ export class ClientManagementComponent implements OnInit {
     this.subscription = this.observeService.notifyClientComp
       .subscribe((res) => {
         this.client = res;
-        console.log(this.client);
         this.initForm();
       });
     if (this.client) {
