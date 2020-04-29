@@ -28,9 +28,15 @@ export class ClientManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription = this.observeService.notifyClientComp
-      .subscribe((res) => { this.client = res; this.initForm(); });
-    this.initClient();
-    this.initForm();
+      .subscribe((res) => {
+        this.client = res;
+        console.log(this.client);
+        this.initForm();
+      });
+    if (this.client) {
+      this.initClient();
+      this.initForm();
+    }
   }
 
   initClient() {
